@@ -1,15 +1,46 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <NavBar :isAuthenticated="isAuthenticated" @logout="logout" class="mb-5"/>
+    <router-view :userId="userId" @login="login" v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NavBar from "./components/NavBar";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavBar
+  },
+  data() {
+    return {
+      token: localStorage.getItem('token'),
+      userId: parseInt(localStorage.getItem('id'), 10),
+      isAuthenticated: localStorage.getItem('token') != null
+    }
+  },
+  methods: {
+    login(token, id) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
+      this.token = token;
+      this.userId = id;
+      this.isAuthenticated = true;
+    },
+    logout() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('id')
+      this.userId = null;
+      this.token = null;
+      this.isAuthenticated = false;
+      console.log(this.userId)
+      console.log(this.token)
+    }
   }
 }
 </script>
@@ -21,6 +52,37 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
+}
+.logo {
+  width: 50%;
+}
+.btn {
+  margin-top: 100px;
+}
+
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
