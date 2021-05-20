@@ -1,9 +1,11 @@
 <template>
-    <div class="container">
-        <el-card :body-style="{ padding: '0px' }" >
+    <button class="container btn m-0" v-on:click="goToEvent">
+        <el-card :body-style="{ padding: '0px' }"
+                 shadow="hover"
+        >
             <el-image
                 :src="getImage()"
-                onerror="javascript:this.src='https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png'"
+                onerror="javascript:this.src='https://www.weahsn.net/wp-content/themes/reticulum/images/event-default-small.jpg'"
                 style="width: auto; height: 310px"
                 fit="cover">
             </el-image>
@@ -37,7 +39,7 @@
                 </div>
             </div>
         </el-card>
-    </div>
+    </button>
 </template>
 
 <script>
@@ -67,6 +69,9 @@
         methods: {
             getImage() {
                 return SERVER_URL + "/events/" + this.$props.id + "/image";
+            },
+            goToEvent() {
+                this.$router.push({name: 'Event Details', params: {eventId: this.$props.id}});
             }
         }
     }

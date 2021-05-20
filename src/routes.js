@@ -3,6 +3,7 @@ import Home from "./components/views/Home";
 import SignIn from "./components/views/SignIn";
 import Register from "./components/views/Register";
 import Events from "./components/views/Events";
+import EventDetails from "./components/views/EventDetails";
 
 const routes = [
     {
@@ -19,6 +20,15 @@ const routes = [
         name: "Events",
         meta: {title: 'Find Events'},
         component: Events
+    },
+    {
+        path: "/events/:eventId(\\d+)",
+        name: "Event Details",
+        meta: {title: 'Event Details'},
+        component: EventDetails,
+        props: route => ({
+            eventId: parseInt(route.params.eventId, 10)
+        }),
     },
     {
         path: "/signin",

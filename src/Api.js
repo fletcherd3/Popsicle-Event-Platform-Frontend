@@ -22,6 +22,11 @@ export const Api = {
             console.log(error);
         })
     },
+    getEvent: (eventId) => {
+        return instance.get("/events/" + eventId).catch(error => {
+            console.log(error);
+        })
+    },
     getEventImage: (eventId) => {
         return instance.get("/events/" + eventId + "/images").catch(error => {
             console.log(error);
@@ -33,6 +38,11 @@ export const Api = {
                 'X-Authorization': user.token,
                 'Content-Type': image.file.type
             }
+        });
+    },
+    getAttendees: (eventId) => {
+        return instance.get("/events/" + eventId + "/attendees").catch(error => {
+            console.log(error);
         });
     }
 };

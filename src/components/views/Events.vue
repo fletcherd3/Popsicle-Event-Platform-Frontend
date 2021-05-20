@@ -31,8 +31,8 @@
                         <el-button type="primary" v-on:click="sendQuery">Find Events</el-button>
                     </el-form>
                 </el-card>
-                <el-row class=" mt-2">
-                    <div v-for="event in slicedEvents" :key="event.eventId" class="my-2 col-12 col-md-6 col-lg-4">
+                <el-row class="mt-2">
+                    <div v-for="event in slicedEvents" :key="event.eventId" class="my-0 col-12 col-md-6 col-lg-4">
                         <EventCard
                                 :id="event.eventId"
                                 :title="event.title"
