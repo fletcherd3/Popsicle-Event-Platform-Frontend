@@ -16,12 +16,12 @@
                             <div class="d-flex flex-wrap align-items-center p-0">
                                 <el-form-item
                                         label="Date & Time"
-                                        prop="dateTime"
+                                        prop="date"
                                         class="col-sm-6 w-100"
                                 >
                                     <el-date-picker
                                             class="w-100"
-                                            v-model="form.dateTime"
+                                            v-model="form.date"
                                             type="datetime"
                                             format="DD/MM/YYYY h:mm a"
                                     >
@@ -30,11 +30,11 @@
                                 <el-form-item
                                         class="col-sm-6 w-100"
                                         label="Categories"
-                                        prop="categoryIds"
+                                        prop="categories"
                                 >
                                     <el-cascader
                                             class="w-100"
-                                            v-model="form.categoryIds"
+                                            v-model="form.categories"
                                             :options="options"
                                             :props="{ multiple: true }"
                                             clearable>
@@ -53,7 +53,7 @@
                                         prop="fee"
                                 >
                                     <el-input-number class="w-100" v-model="form.fee" :min="0" :precision="2"
-                                                     :step="0.1"></el-input-number>
+                                                     :step="0.1"/>
                                 </el-form-item>
                             </div>
                             <div class="d-flex flex-wrap align-items-center">
@@ -64,8 +64,8 @@
                                 >
                                     <el-switch class="w-100" v-model="form.isOnline"></el-switch>
                                 </el-form-item>
-                                <el-form-item class="col-sm-9 w-100" label="Link" prop="link">
-                                    <el-input class="w-100" v-model="form.link" :disabled="!form.isOnline"
+                                <el-form-item class="col-sm-9 w-100" label="Link" prop="url">
+                                    <el-input class="w-100" v-model="form.url" :disabled="!form.isOnline"
                                               placeholder="https://"></el-input>
                                 </el-form-item>
                                 <el-form-item
@@ -76,7 +76,8 @@
                                     <el-input v-model="form.venue" :disabled="form.isOnline"></el-input>
                                 </el-form-item>
                             </div>
-                            <el-tooltip effect="dark" content="Have the ability to accept and reject attendees" placement="right">
+                            <el-tooltip effect="dark" content="Have the ability to accept and reject attendees"
+                                        placement="right">
                                 <el-form-item
                                         label="Attendance Control"
                                         prop="requiresAttendanceControl"
@@ -89,7 +90,8 @@
                                     label="Description"
                                     prop="description"
                             >
-                                <el-input class="w-100" type="textarea" v-model="form.description" maxlength="2048" show-word-limit/>
+                                <el-input class="w-100" type="textarea" v-model="form.description" maxlength="2048"
+                                          show-word-limit/>
                             </el-form-item>
                         </el-form>
                         <el-button v-on:click="next">Next</el-button>
@@ -105,10 +107,10 @@
                         >
                             <el-image
                                     class="avatar"
-                                    v-if="imageUrl" :src="imageUrl"
+                                    :src="getImage()"
+                                    onerror="javascript:this.src='https://www.weahsn.net/wp-content/themes/reticulum/images/event-default-small.jpg'"
                                     fit="cover">
                             </el-image>
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                         <el-button type="primary" v-on:click="finish">{{this.imageBtnText}}</el-button>
                     </div>
@@ -119,28 +121,29 @@
 </template>
 
 <script>
-    import {Api} from '../../Api';
+    import {Api, SERVER_URL} from '../../Api';
     import {options} from '../../categoriesMap';
+
     const moment = require('moment');
 
     export default {
-        name: 'CreateEvent',
+        name: 'EditEvent',
         data() {
             const validateLink = (rule, value, callback) => {
                 if (!this.form.isOnline || (value && (value.startsWith('http://') || value.startsWith('https://')))) {
-                    this.$refs.form.validateField('link');
+                    this.$refs.form.validateField('url');
                     callback();
                 } else {
                     callback(new Error('Link must start with http:// or https://'));
                 }
             };
-            const validateDateTime = (rule, value, callback) => {
+            const validateDate = (rule, value, callback) => {
                 const today = new Date();
                 value = Date.parse(value);
                 if (today - value > 0) {
                     callback(new Error("An event can't be in the past"));
                 } else {
-                    this.$refs.form.validateField('dateTime');
+                    this.$refs.form.validateField('date');
                     callback();
                 }
             };
@@ -148,7 +151,7 @@
                 if (!this.form.isOnline && value === '') {
                     callback(new Error("An in person event must have a venue"));
                 } else {
-                    this.$refs.form.validateField('dateTime');
+                    this.$refs.form.validateField('date');
                     callback();
                 }
             };
@@ -159,28 +162,29 @@
                 form: {
                     title: '',
                     description: '',
-                    categoryIds: [],
-                    dateTime: null,
+                    categories: [],
+                    date: null,
                     isOnline: false,
-                    fee: 0,
+                    fee: 1,
                     capacity: 1,
                     venue: '',
                     requiresAttendanceControl: false,
-                    link: ''
+                    organizerId: null,
+                    url: ''
                 },
                 rules: {
-                    link: [
+                    url: [
                         {validator: validateLink, trigger: 'blur'}
                     ],
                     title: [
                         {required: true, message: 'An event must have a title'}
                     ],
-                    categoryIds: [
+                    categories: [
                         {required: true, message: 'An event must be in at least one category'}
                     ],
-                    dateTime: [
+                    date: [
                         {required: true, message: 'An event must have a date/time'},
-                        {validator: validateDateTime, trigger: 'blur'}
+                        {validator: validateDate, trigger: 'blur'}
                     ],
                     description: [
                         {required: true, message: 'An event must have a description'}
@@ -192,35 +196,43 @@
                         {required: true, message: 'An event must have a fee'},
                     ],
                 },
-                eventId: null,
                 imageUrl: '',
                 imageBtnText: 'Skip'
             };
         },
+        props: {
+            eventId: Number,
+            userId: Number
+        },
         methods: {
             next() {
                 // Format the categories and the date/time
-                this.form.categoryIds = this.form.categoryIds.map(el => parseInt(el[0], 10));
-                this.form.date = moment(Date.parse(this.form.dateTime)).format('YYYY-MM-DD HH:MM:SS');
+                this.form.categoryIds = this.form.categories.map(el => parseInt(el[0], 10));
+                this.form.date = moment(Date.parse(this.form.date)).format('YYYY-MM-DD HH:mm:SS');
+                if (!this.form.capacity) {
+                    this.form.capacity = undefined;
+                }
 
                 this.$refs['form'].validate((valid) => {
-                    let createErr = false;
+                    let editErr = false;
                     if (valid) {
-                        Api.createEvent(this.form).catch(error => {
-                            createErr = true;
+                        Api.editEvent(this.form, this.$props.eventId).catch(error => {
+                            editErr = true;
                             if (error.response.status === 400) {
                                 this.$message.error('Oops, check your values and try again');
-                            } if (error.response.status === 401) {
+                            } else if (error.response.status === 401) {
                                 this.$message.error("Oops, look like you aren't signed in");
+                            } else if (error.response.status === 403) {
+                                this.$message.error("You can only edit your own events");
+                            } else if (error.response.status === 404) {
+                                this.$message.error("That event doesn't exist");
                             } else {
                                 this.$message.error('Oops, an error has occurred!');
                             }
-                        }).then(res => {
-                            if (!createErr) {
+                        }).then(() => {
+                            if (!editErr) {
                                 // Go to the next page
                                 this.onDetails = false;
-
-                                this.eventId = res.data.eventId;
                             }
                         });
                     }
@@ -244,11 +256,32 @@
             uploadEventImage(file) {
                 Api.uploadEventImage(file, this.eventId).catch(() => {
                     this.$message.error('Oops, an error has occurred!');
-                })
+                }).then(() => {this.imageBtnText = 'Upload'});
             },
             finish() {
                 this.$router.push({name: 'Events'})
-            }
+            },
+            isAuthenticated() {
+                return this.form.organizerId === this.$props.userId;
+            },
+            async getEvent(eventId) {
+                Api.getEvent(eventId).then(res => {
+                    this.form = res.data;
+                    this.form.isOnline = this.form.isOnline ? true : false;
+                    this.form.requiresAttendanceControl = this.form.requiresAttendanceControl ? true : false;
+                    this.form.fee = parseFloat(this.form.fee);
+
+                    if (!this.isAuthenticated()) {
+                        this.finish();
+                    }
+                });
+            },
+            getImage() {
+                return this.imageUrl ? this.imageUrl : SERVER_URL + "/events/" + this.$props.eventId + "/image";
+            },
+        },
+        async mounted() {
+            await this.getEvent(this.$props.eventId);
         }
     }
 </script>
@@ -266,18 +299,9 @@
         border-color: #409eff;
     }
 
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        margin-top: 75px;
-        margin-bottom: 75px;
-        text-align: center;
-    }
-
     .avatar {
-        width: 178px;
-        height: 178px;
+        width: auto;
+        height: 100%;
         display: block;
     }
 </style>

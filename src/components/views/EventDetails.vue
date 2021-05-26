@@ -24,11 +24,19 @@
                             <h4 v-else>Free Event</h4>
                         </div>
                     </div>
-                    <div v-if="userId === event.organizerId" class="row w-100 align-items-center">
+                    <div class="row w-100 align-items-center">
                         <h3 class="mt-1 text-wrap info">{{event.title}}</h3>
-                        <div class="ml-auto mr-3 mt-2">
-                            <el-button icon="el-icon-edit" round>Edit</el-button>
-                            <el-button type="danger" icon="el-icon-delete" round>Delete</el-button>
+                        <div v-if="userId === event.organizerId && Date.parse(event.date) > new Date()"
+                             class="ml-auto mr-3 mt-2">
+                            <el-button v-on:click="editEvent" icon="el-icon-edit" round>Edit</el-button>
+                            <el-popconfirm
+                                    title="Are you sure to delete your event?"
+                                    v-on:confirm="deleteEvent"
+                            >
+                                <template #reference>
+                                    <el-button type="danger" icon="el-icon-delete" round>Delete</el-button>
+                                </template>
+                            </el-popconfirm>
                         </div>
                     </div>
                 </div>
@@ -79,7 +87,8 @@
                     <el-collapse-item title="Attendees">
                         <el-row>
                             <div class="col-lg-6" v-for="attendee in attendees" :key="attendee.attendeeId">
-                                <Attendee @changeAttendees="changeAttendees" :attendee="attendee" :orgId="event.organizerId"
+                                <Attendee @changeAttendees="changeAttendees" :attendee="attendee"
+                                          :orgId="event.organizerId"
                                           :isOrganizer="userId === event.organizerId" :eventId="eventId"/>
 
                             </div>
@@ -142,7 +151,7 @@
             };
         },
         props: {
-            eventId: null,
+            eventId: Number,
             userId: Number
         },
         components: {
@@ -168,7 +177,6 @@
                     let result = res.data;
                     result = result.sort((a, b) => (new Date(a.dateOfInterest) < new Date(b.dateOfInterest)) ? 1 : -1);
                     this.attendees = result;
-                    console.log(result)
                 });
             },
             getHostAvatar() {
@@ -186,12 +194,26 @@
             },
             changeAttendees(inc) {
                 this.event.attendeeCount += (inc);
+            },
+            editEvent() {
+                this.$router.push({name: 'Edit Event', params: {eventId: this.$props.eventId}});
+            },
+            deleteEvent() {
+                Api.deleteEvent(this.$props.eventId).then(res => {
+                    if (res.status === 200) {
+                        this.$router.push({name: 'Events'});
+                    } else {
+                        this.$message.error('An error occurred when deleting your event');
+                    }
+                });
             }
         },
         watch: {
             $route: {
-                handler() {
-                    this.$router.go();
+                handler(val) {
+                    if (val.name === 'Event Details') {
+                        this.$router.go();
+                    }
                 },
                 deep: true
             },

@@ -25,6 +25,13 @@ export const Api = {
             console.log(error);
         })
     },
+    editEvent: (body, eventId) => {
+        return instance.patch("/events/" + eventId, body, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
     getEventImage: (eventId) => {
         return instance.get("/events/" + eventId + "/images").catch(error => {
             console.log(error);
@@ -49,6 +56,13 @@ export const Api = {
     },
     createEvent: (body) => {
         return instance.post("/events", body, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
+    deleteEvent: (eventId) => {
+        return instance.delete("/events/" + eventId, {
             headers: {
                 'X-Authorization': localStorage.getItem('token')
             }

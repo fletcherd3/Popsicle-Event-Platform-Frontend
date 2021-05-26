@@ -5,6 +5,7 @@ import Register from "./components/views/Register";
 import Events from "./components/views/Events";
 import EventDetails from "./components/views/EventDetails";
 import CreateEvent from "./components/views/CreateEvent";
+import EditEvent from "./components/views/EditEvent";
 
 const routes = [
     {
@@ -27,6 +28,15 @@ const routes = [
         name: "Create Event",
         meta: {title: 'Create Event'},
         component: CreateEvent
+    },
+    {
+        path: "/events/:eventId(\\d+)/edit",
+        name: "Edit Event",
+        meta: {title: 'Edit Event'},
+        component: EditEvent,
+        props: route => ({
+            eventId: parseInt(route.params.eventId, 10)
+        })
     },
     {
         path: "/events/:eventId(\\d+)",
