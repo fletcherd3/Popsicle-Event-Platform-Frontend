@@ -2,6 +2,7 @@
     <div class="hello">
         <h1>Home</h1>
         user id {{$props}}
+        <!-- Ideas: add the grades i get for be and fe to page for portforlio       -->
     </div>
 </template>
 

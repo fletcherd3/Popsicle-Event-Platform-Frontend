@@ -9,7 +9,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item" :class="{ active: $route.name === 'Events' }">
-                    <a class="nav-link" v-on:click="$router.push({ name: 'Events' })" href="javascript:void(0);">Events</a>
+                    <a class="nav-link" v-on:click="$router.push({ name: 'Events' })" href="javascript:void(0);">Find Events</a>
+                </li>
+                <li v-if="isAuthenticated" class="nav-item" :class="{ active: $route.name === 'Create Event' }">
+                    <a class="nav-link" v-on:click="$router.push({ name: 'Create Event' })" href="javascript:void(0);">Create Event</a>
                 </li>
             </ul>
             <form  class="form-inline my-lg-0 navbar-nav">

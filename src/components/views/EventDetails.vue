@@ -24,11 +24,11 @@
                             <h4 v-else>Free Event</h4>
                         </div>
                     </div>
-                    <div class="row w-100 align-items-center">
+                    <div v-if="userId === event.organizerId" class="row w-100 align-items-center">
                         <h3 class="mt-1 text-wrap info">{{event.title}}</h3>
                         <div class="ml-auto mr-3 mt-2">
-                            <el-button icon="el-icon-edit" round >Edit</el-button>
-                            <el-button type="danger" icon="el-icon-delete" round >Delete</el-button>
+                            <el-button icon="el-icon-edit" round>Edit</el-button>
+                            <el-button type="danger" icon="el-icon-delete" round>Delete</el-button>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,8 @@
                         <div class="my-2">
                             <b>Host</b><br/>
                             <div class="row align-items-center">
-                                <el-avatar class='mr-2' fit='cover' :size="40" :src="getHostAvatar()" icon="el-icon-user-solid"></el-avatar>
+                                <el-avatar class='mr-2' fit='cover' :size="40" :src="getHostAvatar()"
+                                           icon="el-icon-user-solid"></el-avatar>
                                 <div>{{event.organizerFirstName}} {{event.organizerLastName}}</div>
                             </div>
 
@@ -54,7 +55,7 @@
                             <b>Attendees</b><br/>
                             {{event.attendeeCount ? event.attendeeCount : 0}} attending
                         </div>
-                        <div  class="my-2">
+                        <div class="my-2">
                             <b>Capacity</b><br/>
                             {{event.capacity}} people
                         </div>
@@ -77,17 +78,19 @@
                 <el-collapse @change="loadSimilar">
                     <el-collapse-item title="Attendees">
                         <el-row>
-                            <div class="col-lg-6"  v-for="attendee in attendees" :key="attendee.attendeeId">
-                                <Attendee :attendee="attendee" :orgId="event.organizerId" />
+                            <div class="col-lg-6" v-for="attendee in attendees" :key="attendee.attendeeId">
+                                <Attendee @changeAttendees="changeAttendees" :attendee="attendee" :orgId="event.organizerId"
+                                          :isOrganizer="userId === event.organizerId" :eventId="eventId"/>
+
                             </div>
                         </el-row>
-
 
 
                     </el-collapse-item>
                     <el-collapse-item title="Similar Events">
                         <el-row>
-                            <div v-for="event in similarEvents" :key="event.eventId" class="my-0 col-12 col-md-6 col-lg-4">
+                            <div v-for="event in similarEvents" :key="event.eventId"
+                                 class="my-0 col-12 col-md-6 col-lg-4">
                                 <EventCard
                                         :id="event.eventId"
                                         :title="event.title"
@@ -139,7 +142,8 @@
             };
         },
         props: {
-            eventId: null
+            eventId: null,
+            userId: Number
         },
         components: {
             EventCard,
@@ -161,7 +165,10 @@
             },
             getAttendees(eventId) {
                 Api.getAttendees(eventId).then(res => {
-                    this.attendees = res.data;
+                    let result = res.data;
+                    result = result.sort((a, b) => (new Date(a.dateOfInterest) < new Date(b.dateOfInterest)) ? 1 : -1);
+                    this.attendees = result;
+                    console.log(result)
                 });
             },
             getHostAvatar() {
@@ -176,8 +183,19 @@
                         this.similarEvents = res.data.filter(event => event.eventId !== this.$props.eventId);
                     });
                 }
+            },
+            changeAttendees(inc) {
+                this.event.attendeeCount += (inc);
             }
-        }
+        },
+        watch: {
+            $route: {
+                handler() {
+                    this.$router.go();
+                },
+                deep: true
+            },
+        },
     }
 </script>
 

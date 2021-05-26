@@ -61,7 +61,7 @@
             hostFName: String,
             hostSName: String,
             attendees: Number,
-            categories: Array,
+            categories: Array
         },
         created() {
             this.cMap = cMap;
@@ -73,7 +73,7 @@
             goToEvent() {
                 this.$router.push({name: 'Event Details', params: {eventId: this.$props.id}});
             }
-        }
+        },
     }
 </script>
 

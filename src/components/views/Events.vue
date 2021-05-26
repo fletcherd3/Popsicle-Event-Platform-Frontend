@@ -41,6 +41,7 @@
                                 :hostSName="event.organizerLastName"
                                 :attendees="event.numAcceptedAttendees"
                                 :categories="event.categories"
+                                :key="0"
                         />
                     </div>
                 </el-row>

@@ -51,7 +51,13 @@
             login() {
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
-                        Api.login(this.form).then(res => {
+                        Api.login(this.form).catch(error => {
+                            if (error.response.status === 400) {
+                                this.$message.error("Oops, that's the wrong email or password");
+                            } else {
+                                this.$message.error('Oops, an error has occurred!');
+                            }
+                        }).then(res => {
                             const token = res.data.token;
                             const id = res.data.userId;
                             this.$emit("login", token, id);

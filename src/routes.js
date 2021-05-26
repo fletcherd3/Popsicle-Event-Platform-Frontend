@@ -4,6 +4,7 @@ import SignIn from "./components/views/SignIn";
 import Register from "./components/views/Register";
 import Events from "./components/views/Events";
 import EventDetails from "./components/views/EventDetails";
+import CreateEvent from "./components/views/CreateEvent";
 
 const routes = [
     {
@@ -20,6 +21,12 @@ const routes = [
         name: "Events",
         meta: {title: 'Find Events'},
         component: Events
+    },
+    {
+        path: "/events/create",
+        name: "Create Event",
+        meta: {title: 'Create Event'},
+        component: CreateEvent
     },
     {
         path: "/events/:eventId(\\d+)",

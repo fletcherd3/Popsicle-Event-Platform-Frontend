@@ -10,9 +10,7 @@ const instance = axios.create({
 
 export const Api = {
     login: (body) => {
-        return instance.post("/users/login", body).catch(error => {
-            console.log(error);
-        })
+        return instance.post("/users/login", body);
     },
     register: (body) => {
         return instance.post("/users/register", body);
@@ -41,8 +39,34 @@ export const Api = {
         });
     },
     getAttendees: (eventId) => {
-        return instance.get("/events/" + eventId + "/attendees").catch(error => {
+        return instance.get("/events/" + eventId + "/attendees", {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        }).catch(error => {
             console.log(error);
+        });
+    },
+    createEvent: (body) => {
+        return instance.post("/events", body, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
+    uploadEventImage: (image, eventId) => {
+        return instance.put("/events/" + eventId + "/image", image.file, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token'),
+                'Content-Type': image.file.type
+            }
+        });
+    },
+    changeAttendeeStatus: (eventId, userId, newStatus) => {
+        return instance.patch("/events/" + eventId + "/attendees/" + userId, {status: newStatus}, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
         });
     }
 };
