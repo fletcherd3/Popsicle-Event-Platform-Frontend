@@ -85,6 +85,9 @@
             <el-card class="my-3" shadow="always">
                 <el-collapse @change="loadSimilar">
                     <el-collapse-item title="Attendees">
+                        <div v-if="attendees.length === 0">
+                            <el-empty description="This event has no attendees" :image-size="200"></el-empty>
+                        </div>
                         <el-row>
                             <div class="col-lg-6" v-for="attendee in attendees" :key="attendee.attendeeId">
                                 <Attendee @changeAttendees="changeAttendees" :attendee="attendee"
@@ -97,6 +100,9 @@
 
                     </el-collapse-item>
                     <el-collapse-item title="Similar Events">
+                        <div v-if="similarEvents.length === 0">
+                            <el-empty description="There are no similar events" :image-size="200"></el-empty>
+                        </div>
                         <el-row>
                             <div v-for="event in similarEvents" :key="event.eventId"
                                  class="my-0 col-12 col-md-6 col-lg-4">

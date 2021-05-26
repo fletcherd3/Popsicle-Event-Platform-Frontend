@@ -28,7 +28,8 @@
                                 </el-cascader>
                             </el-form-item>
                         </div>
-                        <el-button type="primary" v-on:click="sendQuery">Find Events</el-button>
+                        <el-button class="mr-4" type="primary" v-on:click="sendQuery">Find Events</el-button>
+                        <el-checkbox v-model="myEvents">My Events</el-checkbox>
                     </el-form>
                 </el-card>
                 <el-row class="mt-2">
@@ -79,8 +80,9 @@
         },
         data() {
             return {
-                props: { multiple: true },
+                props: {multiple: true},
                 options: options,
+                myEvents: false,
                 query: {
                     search: '',
                     count: null,
@@ -93,6 +95,9 @@
                 eventsPerPage: 10
             };
         },
+        props: {
+            userId: Number
+        },
         mounted() {
             this.sendQuery();
         },
@@ -100,14 +105,17 @@
             sendQuery() {
                 let params = {};
 
-               if (this.query.tags.length > 0) {
-                   params.categoryIds = this.query.tags.map(el => parseInt(el[0], 10))
-               }
+                if (this.query.tags.length > 0) {
+                    params.categoryIds = this.query.tags.map(el => parseInt(el[0], 10))
+                }
                 if (this.query.search) {
-                   params.q = this.query.search;
+                    params.q = this.query.search;
                 }
                 if (this.query.count) {
                     params.count = this.query.count;
+                }
+                if (this.myEvents) {
+                    params.organizerId = this.$props.userId;
                 }
                 params.sortBy = this.query.sortBy;
 
@@ -129,7 +137,7 @@
             handleSizeChange(val) {
                 this.eventsPerPage = val;
                 this.slicedEvents = this.events.slice(this.eventsPerPage * (this.currentPage - 1), this.eventsPerPage + (this.eventsPerPage * (this.currentPage - 1)));
-            },
+            }
         },
     }
 </script>
