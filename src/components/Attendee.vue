@@ -19,7 +19,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div v-if="isOrganizer && dAttendee.attendeeId !== orgId" class="ml-auto mr-3">
+                        <div v-if="isOrganizer" class="ml-auto mr-3">
                             <el-tooltip effect="dark" content="Accept into event" placement="right">
                                 <el-button
                                         v-on:click="changeStatus('accepted')"

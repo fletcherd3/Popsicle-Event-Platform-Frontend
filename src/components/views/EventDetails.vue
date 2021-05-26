@@ -26,10 +26,25 @@
                     </div>
                     <div class="row w-100 align-items-center">
                         <h3 class="mt-1 text-wrap info">{{event.title}}</h3>
-                        <div v-if="userId === event.organizerId && Date.parse(event.date) > new Date()"
-                             class="ml-auto mr-3 mt-2">
-                            <el-button v-on:click="editEvent" icon="el-icon-edit" round>Edit</el-button>
+                        <div class="ml-auto mr-3 mt-2" v-if="Date.parse(event.date) > new Date()">
+                            <el-button class="mb-2" v-if="attendanceStatus === 'not_going'" v-on:click="attendEvent"
+                                       type="primary"
+                                       icon="el-icon-s-ticket"
+                                       :disabled="this.event.attendeeCount >= this.event.capacity" round>Attend
+                            </el-button>
+                            <el-button class="mb-2" v-if="attendanceStatus === 'accepted'" icon="el-icon-s-ticket"
+                                       v-on:click="leaveEvent" round>Leave Event
+                            </el-button>
+                            <el-button class="mb-2" v-if="attendanceStatus === 'pending'" icon="el-icon-s-ticket"
+                                       v-on:click="leaveEvent" round>Cancel Request
+                            </el-button>
+                            <el-button class="mb-2"
+                                       v-if="userId === event.organizerId"
+                                       v-on:click="editEvent" icon="el-icon-edit" round>Edit
+                            </el-button>
                             <el-popconfirm
+                                    class="mb-2"
+                                    v-if="userId === event.organizerId "
                                     title="Are you sure to delete your event?"
                                     v-on:confirm="deleteEvent"
                             >
@@ -40,8 +55,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row w-100 info mt-4">
-                    <div class="col-8">
+                <div class="row w-100 info mt-3">
+                    <div class="col-8 description">
                         <h4>About this event</h4>
                         {{event.description}}
                     </div>
@@ -96,8 +111,6 @@
 
                             </div>
                         </el-row>
-
-
                     </el-collapse-item>
                     <el-collapse-item title="Similar Events">
                         <div v-if="similarEvents.length === 0">
@@ -153,12 +166,15 @@
                     categories: []
                 },
                 attendees: [],
-                similarEvents: []
+                similarEvents: [],
+                attendanceStatus: 'not_going',
+                cancelAttdTxt: 'Leave Event'
             };
         },
         props: {
             eventId: Number,
-            userId: Number
+            userId: Number,
+            isAuthenticated: Boolean
         },
         components: {
             EventCard,
@@ -183,7 +199,20 @@
                     let result = res.data;
                     result = result.sort((a, b) => (new Date(a.dateOfInterest) < new Date(b.dateOfInterest)) ? 1 : -1);
                     this.attendees = result;
+                    this.updateAttendanceStatus();
                 });
+            },
+            updateAttendanceStatus() {
+                let status;
+                let interested = this.attendees.filter((attendee) => {
+                    return attendee.attendeeId === this.$props.userId
+                });
+                if (interested.length) {
+                    status = interested[0].status;
+                } else {
+                    status = 'not_going';
+                }
+                this.attendanceStatus = status;
             },
             getHostAvatar() {
                 return SERVER_URL + "/users/" + this.event.organizerId + "/image";
@@ -192,7 +221,7 @@
                 // Only search for similar events if the event has categories and only search once
                 if (this.event.categories.length > 0 && this.similarEvents.length === 0) {
                     let params = {};
-                    params.categories = this.event.categories;
+                    params.categoryIds = this.event.categories;
                     Api.getEvents(params).then(res => {
                         this.similarEvents = res.data.filter(event => event.eventId !== this.$props.eventId);
                     });
@@ -205,11 +234,44 @@
                 this.$router.push({name: 'Edit Event', params: {eventId: this.$props.eventId}});
             },
             deleteEvent() {
-                Api.deleteEvent(this.$props.eventId).then(res => {
+                Api.deleteEvent(this.$props.eventId).catch((err) => {
+                    if (err) {
+                        this.$message.error('An error occurred when deleting your event');
+                    }
+                }).then(res => {
                     if (res.status === 200) {
                         this.$router.push({name: 'Events'});
-                    } else {
-                        this.$message.error('An error occurred when deleting your event');
+                    }
+                });
+            },
+            attendEvent() {
+                if (!this.$props.isAuthenticated) {
+                    this.$router.push({name: 'Sign In'});
+                }
+                Api.attendEvent(this.$props.eventId).catch((err) => {
+                    if (err) {
+                        this.$message.error('An error occurred when trying to attend the event');
+                    }
+                }).then((res) => {
+                    if (res.status === 201) {
+                        if (!this.event.requiresAttendanceControl) {
+                            this.event.attendeeCount += 1;
+                        }
+                        this.getAttendees(this.$props.eventId);
+                    }
+                });
+            },
+            leaveEvent() {
+                Api.leaveEvent(this.$props.eventId).catch((err) => {
+                    if (err) {
+                        this.$message.error('An error occurred when trying to leave the event');
+                    }
+                }).then((res) => {
+                    if (res.status === 200) {
+                        if (!this.event.requiresAttendanceControl) {
+                            this.event.attendeeCount -= 1;
+                        }
+                        this.getAttendees(this.$props.eventId);
                     }
                 });
             }
@@ -245,6 +307,10 @@
         width: 40px;
         height: 40px;
         margin-right: 10px;
+    }
+
+    .description {
+        white-space: pre-wrap;
     }
 
 </style>

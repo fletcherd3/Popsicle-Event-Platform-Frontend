@@ -3,6 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <el-card shadow="always">
+                    <logo :text="false" class="logo w-100"/>
                     <el-form :model="form" ref="form">
                         <el-form-item
                                 prop="email"
@@ -33,9 +34,13 @@
 
 <script>
     import {Api} from '../../Api';
+    import Logo from '../Logo';
 
     export default {
         name: 'SignIn',
+        components: {
+            Logo
+        },
         data() {
             return {
                 form: {
@@ -71,6 +76,9 @@
     }
 </script>
 
-<style>
+<style scoped>
+    .logo {
+        font-size: 5em;
+    }
 
 </style>

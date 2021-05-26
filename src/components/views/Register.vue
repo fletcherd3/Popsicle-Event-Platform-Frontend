@@ -3,6 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <el-card shadow="always">
+                    <logo :text="false" class="logo w-100"/>
                     <div v-if="onDetails">
                         <el-form :model="form" ref="form" :rules="rules">
                             <div class="row justify-content-center">
@@ -63,9 +64,13 @@
 
 <script>
     import {Api} from '../../Api';
+    import Logo from '../Logo';
 
     export default {
         name: 'Register',
+        components: {
+            Logo
+        },
         data() {
             const validatePassword = (rule, value, callback) => {
                 if (value.length < 8) {
@@ -162,7 +167,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
@@ -185,5 +190,9 @@
         width: 178px;
         height: 178px;
         display: block;
+    }
+
+    .logo {
+        font-size: 5em;
     }
 </style>

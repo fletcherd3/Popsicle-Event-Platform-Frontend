@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <NavBar :isAuthenticated="isAuthenticated" @logout="logout" class="mb-5"/>
-    <router-view :userId="userId" @login="login" v-slot="{ Component }">
+    <router-view :isAuthenticated="isAuthenticated" :userId="userId" @login="login" v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />
       </transition>

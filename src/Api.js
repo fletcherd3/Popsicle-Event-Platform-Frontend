@@ -54,6 +54,20 @@ export const Api = {
             console.log(error);
         });
     },
+    attendEvent: (eventId) => {
+        return instance.post("/events/" + eventId + "/attendees", null, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
+    leaveEvent: (eventId) => {
+        return instance.delete("/events/" + eventId + "/attendees", {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
     createEvent: (body) => {
         return instance.post("/events", body, {
             headers: {

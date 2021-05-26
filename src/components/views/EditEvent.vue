@@ -155,7 +155,6 @@
                     callback();
                 }
             };
-
             return {
                 onDetails: true,
                 options: options,
@@ -215,6 +214,7 @@
 
                 this.$refs['form'].validate((valid) => {
                     let editErr = false;
+                    if (!this.form.url) this.form.url = '';
                     if (valid) {
                         Api.editEvent(this.form, this.$props.eventId).catch(error => {
                             editErr = true;
@@ -259,7 +259,7 @@
                 }).then(() => {this.imageBtnText = 'Upload'});
             },
             finish() {
-                this.$router.push({name: 'Events'})
+                this.$router.push({name: 'Event Details', params: {eventId: this.$props.eventId}});
             },
             isAuthenticated() {
                 return this.form.organizerId === this.$props.userId;
@@ -270,6 +270,7 @@
                     this.form.isOnline = this.form.isOnline ? true : false;
                     this.form.requiresAttendanceControl = this.form.requiresAttendanceControl ? true : false;
                     this.form.fee = parseFloat(this.form.fee);
+                    this.form.categories = [];
 
                     if (!this.isAuthenticated()) {
                         this.finish();

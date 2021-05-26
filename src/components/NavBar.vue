@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <a class="navbar-brand" v-on:click="$router.push({ name: 'Home' })" href="javascript:void(0);"><Logo/></a>
+        <Logo :text="true"/>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -16,6 +16,8 @@
                 </li>
             </ul>
             <form  class="form-inline my-lg-0 navbar-nav">
+                Fletcher Dick
+                <i class="el-icon-arrow-down" />
                 <div v-if="isAuthenticated">
                     <el-button class="my-1 my-lg-0 mx-auto mx-lg-1" round v-on:click="logout">Logout</el-button>
                 </div>

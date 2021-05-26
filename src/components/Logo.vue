@@ -1,13 +1,17 @@
 <template>
-    <div v-on:click="$router.push({ name: 'Home' })">
+    <a class="navbar-brand" href="javascript:void(0);" v-on:click="$router.push({ name: 'Home' })">
         <i class="el-icon-ice-cream-round" />
-        Popsicle
-    </div>
+        <span v-if="$props.text">Popsicle</span>
+
+    </a>
 </template>
 
 <script>
     export default {
-        name: "Logo"
+        name: "Logo",
+        props: {
+            text: Boolean
+        }
     }
 </script>
 

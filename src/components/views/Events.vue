@@ -29,7 +29,7 @@
                             </el-form-item>
                         </div>
                         <el-button class="mr-4" type="primary" v-on:click="sendQuery">Find Events</el-button>
-                        <el-checkbox v-model="myEvents">My Events</el-checkbox>
+                        <el-checkbox v-if="$props.isAuthenticated" v-model="myEvents">My Events</el-checkbox>
                     </el-form>
                 </el-card>
                 <el-row class="mt-2">
@@ -96,7 +96,8 @@
             };
         },
         props: {
-            userId: Number
+            userId: Number,
+            isAuthenticated: Boolean
         },
         mounted() {
             this.sendQuery();
