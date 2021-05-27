@@ -54,7 +54,7 @@
                             </el-image>
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
-                        <el-button type="primary" v-on:click="finish">{{this.imageBtnText}}</el-button>
+                        <el-button type="primary" v-on:click="finish">{{imageBtnText}}</el-button>
                     </div>
                 </el-card>
             </div>
@@ -191,7 +191,6 @@
         height: 178px;
         display: block;
     }
-
     .logo {
         font-size: 5em;
     }

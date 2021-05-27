@@ -14,10 +14,11 @@
                 <li v-if="isAuthenticated" class="nav-item" :class="{ active: $route.name === 'Create Event' }">
                     <a class="nav-link" v-on:click="$router.push({ name: 'Create Event' })" href="javascript:void(0);">Create Event</a>
                 </li>
+                <li v-if="isAuthenticated" class="nav-item" :class="{ active: $route.name === 'Profile' }">
+                    <a class="nav-link" v-on:click="$router.push({ name: 'Profile' })" href="javascript:void(0);">My Profile</a>
+                </li>
             </ul>
             <form  class="form-inline my-lg-0 navbar-nav">
-                Fletcher Dick
-                <i class="el-icon-arrow-down" />
                 <div v-if="isAuthenticated">
                     <el-button class="my-1 my-lg-0 mx-auto mx-lg-1" round v-on:click="logout">Logout</el-button>
                 </div>

@@ -15,6 +15,21 @@ export const Api = {
     register: (body) => {
         return instance.post("/users/register", body);
     },
+    getUser: (userId) => {
+        return instance.get("/users/" + userId, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
+    uploadAvatar: (image, user) => {
+        return instance.put("/users/" + user.id + "/image", image.file, {
+            headers: {
+                'X-Authorization': user.token,
+                'Content-Type': image.file.type
+            }
+        });
+    },
     getEvents: (params) => {
         return instance.get("/events", {params: params}).catch(error => {
             console.log(error);
@@ -35,14 +50,6 @@ export const Api = {
     getEventImage: (eventId) => {
         return instance.get("/events/" + eventId + "/images").catch(error => {
             console.log(error);
-        });
-    },
-    uploadAvatar: (image, user) => {
-        return instance.put("/users/" + user.id + "/image", image.file, {
-            headers: {
-                'X-Authorization': user.token,
-                'Content-Type': image.file.type
-            }
         });
     },
     getAttendees: (eventId) => {

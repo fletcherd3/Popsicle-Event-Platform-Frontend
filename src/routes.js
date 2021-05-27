@@ -6,33 +6,37 @@ import Events from "./components/views/Events";
 import EventDetails from "./components/views/EventDetails";
 import CreateEvent from "./components/views/CreateEvent";
 import EditEvent from "./components/views/EditEvent";
+import UserProfile from "./components/views/UserProfile";
 
 const routes = [
     {
         path: "/",
         name: "Home",
         meta: {title: 'Popsicle | Event Platform'},
-        component: Home,
-        props: {
-            msg: "Fletcher"
-        }
+        component: Home
+    },
+    {
+        path: "/profile",
+        name: "Profile",
+        meta: {title: 'Popsicle | Profile'},
+        component: UserProfile,
     },
     {
         path: "/events",
         name: "Events",
-        meta: {title: 'Find Events'},
+        meta: {title: 'Popsicle | Find Events'},
         component: Events
     },
     {
         path: "/events/create",
         name: "Create Event",
-        meta: {title: 'Create Event'},
+        meta: {title: 'Popsicle | Create Event'},
         component: CreateEvent
     },
     {
         path: "/events/:eventId(\\d+)/edit",
         name: "Edit Event",
-        meta: {title: 'Edit Event'},
+        meta: {title: 'Popsicle | Edit Event'},
         component: EditEvent,
         props: route => ({
             eventId: parseInt(route.params.eventId, 10)
@@ -41,7 +45,7 @@ const routes = [
     {
         path: "/events/:eventId(\\d+)",
         name: "Event Details",
-        meta: {title: 'Event Details'},
+        meta: {title: 'Popsicle | Event Details'},
         component: EventDetails,
         props: route => ({
             eventId: parseInt(route.params.eventId, 10)
@@ -56,7 +60,7 @@ const routes = [
     {
         path: "/register",
         name: "Register",
-        meta: {title: 'Register'},
+        meta: {title: 'Popsicle | Register'},
         component: Register
     },
 ];
