@@ -3,11 +3,10 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <el-card shadow="always" class="profile-card">
-                    <el-avatar class='profile' fit='cover' :size="200" :src="getAvatar()"
-                               icon="el-icon-user-solid"/>
+                    <el-avatar class='avatar-icon profile' fit="cover" :size="200" :src="getAvatar()" icon="el-icon-user-solid"/>
                     <div class="info">
                         <div class="row w-100">
-                            <el-button class="ml-auto" type="primary" icon="el-icon-edit" circle></el-button>
+                            <el-button class="ml-auto" v-on:click="$router.push({ name: 'Edit Profile', params: {userId: $props.userId} })" type="primary" icon="el-icon-edit" circle></el-button>
                         </div>
 
                         <div class="mt-2">
@@ -52,24 +51,28 @@
                 }).then((res) => {
                     if (res.status === 200) {
                         this.user = res.data;
+                        // User isn't authorized
+                        if (!this.user.email) {
+                            this.$router.push({ name: 'Events'});
+                        }
                     }
                 })
             }
         },
         mounted() {
             this.getUser();
+
         }
     }
 
 </script>
 
-<style scoped>
+<style>
     .profile-card {
         margin-top: 100px;
     }
 
     .profile {
-        font-size: 7em;
         position: absolute;
         margin-left: auto;
         margin-right: auto;
@@ -81,5 +84,11 @@
     .info {
         margin-top: 37px;
         text-align: center;
+    }
+
+    .el-avatar img {
+        display: block;
+        width: 100%;
+        vertical-align: middle;
     }
 </style>

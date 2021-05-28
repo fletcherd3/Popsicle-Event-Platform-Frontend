@@ -66,7 +66,7 @@
                             const token = res.data.token;
                             const id = res.data.userId;
                             this.$emit("login", token, id);
-                            this.$router.push({ name: 'Home' })
+                            this.$router.push({ name: 'Events' })
                         });
 
                     }

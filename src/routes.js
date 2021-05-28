@@ -7,6 +7,7 @@ import EventDetails from "./components/views/EventDetails";
 import CreateEvent from "./components/views/CreateEvent";
 import EditEvent from "./components/views/EditEvent";
 import UserProfile from "./components/views/UserProfile";
+import EditUserProfile from "./components/views/EditUserProfile";
 
 const routes = [
     {
@@ -20,6 +21,15 @@ const routes = [
         name: "Profile",
         meta: {title: 'Popsicle | Profile'},
         component: UserProfile,
+    },
+    {
+        path: "/profile/:userId(\\d+)/edit",
+        name: "Edit Profile",
+        meta: {title: 'Popsicle | Edit Profile'},
+        component: EditUserProfile,
+        props: route => ({
+            userId: parseInt(route.params.userId, 10)
+        })
     },
     {
         path: "/events",

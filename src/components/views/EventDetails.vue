@@ -6,10 +6,10 @@
                     <div class="col-12 w-100 p-0">
                         <div class="rounded-circle">
                             <el-image
-                                    :src="getImage()"
-                                    onerror="javascript:this.src='https://www.weahsn.net/wp-content/themes/reticulum/images/event-default-small.jpg'"
-                                    style="width: 100%; max-height: 400px"
-                                    fit="cover">
+                                :src="getImage()"
+                                onerror="javascript:this.src='https://www.weahsn.net/wp-content/themes/reticulum/images/event-default-small.jpg'"
+                                style="width: 100%; max-height: 400px"
+                                fit="cover">
                             </el-image>
                         </div>
 
@@ -30,7 +30,7 @@
                             <el-button class="mb-2" v-if="attendanceStatus === 'not_going'" v-on:click="attendEvent"
                                        type="primary"
                                        icon="el-icon-s-ticket"
-                                       :disabled="this.event.attendeeCount >= this.event.capacity" round>Attend
+                                       :disabled="event.attendeeCount >= event.capacity" round>Attend
                             </el-button>
                             <el-button class="mb-2" v-if="attendanceStatus === 'accepted'" icon="el-icon-s-ticket"
                                        v-on:click="leaveEvent" round>Leave Event
@@ -70,7 +70,7 @@
                             </div>
 
                         </div>
-                        <div class="my-2">
+                        <div v-if="event.venue" class="my-2">
                             <b>Location</b><br/>
                             {{event.venue}}
                         </div>
@@ -83,7 +83,7 @@
                             {{event.capacity}} people
                         </div>
                         <div v-if="event.url">
-                            <b>Link to online event</b><br/>
+                            <b>Link</b><br/>
                             <a :href="event.url">{{event.url}}</a>
                         </div>
                         <div class="my-2">
@@ -191,7 +191,9 @@
             },
             getEvent(eventId) {
                 Api.getEvent(eventId).then(res => {
-                    this.event = res.data;
+                    if (res.status === 200) {
+                        this.event = res.data;
+                    }
                 });
             },
             getAttendees(eventId) {
@@ -289,7 +291,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .row {
         margin: 0;
     }
@@ -303,14 +305,8 @@
         text-align: left;
     }
 
-    .avatar {
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
-    }
-
     .description {
         white-space: pre-wrap;
+        padding: 0;
     }
-
 </style>

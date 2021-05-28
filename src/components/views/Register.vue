@@ -132,6 +132,7 @@
                                     const id = loginRes.data.userId;
                                     this.user.token = token;
                                     this.user.id = id;
+                                    this.$emit("login", this.user.token, this.user.id);
                                 });
                             }
                         });
@@ -154,26 +155,25 @@
                 return validType && isLt2M;
             },
             uploadImage(file) {
-                Api.uploadAvatar(file, this.user).catch(() => {
-
+                Api.uploadAvatar(file, this.user.id).catch(() => {
                     this.$message.error('Oops, an error has occurred!');
                 })
             },
             finish() {
-                this.$emit("login", this.user.token, this.user.id);
-                this.$router.push({ name: 'Home' })
+                this.$router.push({ name: 'Profile' })
             }
         }
     }
 </script>
 
-<style scoped>
+<style >
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
+        height: auto;
     }
     .avatar-uploader .el-upload:hover {
         border-color: #409eff;
@@ -186,6 +186,7 @@
         margin-bottom: 75px;
         text-align: center;
     }
+
     .avatar {
         width: 178px;
         height: 178px;

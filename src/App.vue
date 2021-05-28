@@ -38,8 +38,6 @@ export default {
       this.userId = null;
       this.token = null;
       this.isAuthenticated = false;
-      console.log(this.userId)
-      console.log(this.token)
     }
   }
 }

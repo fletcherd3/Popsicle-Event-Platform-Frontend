@@ -134,6 +134,7 @@
             },
             handlePageChange() {
                 this.slicedEvents = this.events.slice(this.eventsPerPage * (this.currentPage - 1), this.eventsPerPage + (this.eventsPerPage * (this.currentPage - 1)));
+                window.scrollTo(0,0);
             },
             handleSizeChange(val) {
                 this.eventsPerPage = val;

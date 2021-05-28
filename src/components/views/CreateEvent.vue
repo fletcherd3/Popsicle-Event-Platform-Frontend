@@ -65,7 +65,7 @@
                                     <el-switch class="w-100" v-model="form.isOnline"></el-switch>
                                 </el-form-item>
                                 <el-form-item class="col-sm-9 w-100" label="Link" prop="link">
-                                    <el-input class="w-100" v-model="form.link" :disabled="!form.isOnline"
+                                    <el-input class="w-100" v-model="form.link"
                                               placeholder="https://"></el-input>
                                 </el-form-item>
                                 <el-form-item
@@ -127,7 +127,7 @@
         name: 'CreateEvent',
         data() {
             const validateLink = (rule, value, callback) => {
-                if (!this.form.isOnline || (value && (value.startsWith('http://') || value.startsWith('https://')))) {
+                if ((!this.form.isOnline && value === '') || (value && (value.startsWith('http://') || value.startsWith('https://')))) {
                     this.$refs.form.validateField('link');
                     callback();
                 } else {
@@ -202,6 +202,7 @@
                 // Format the categories and the date/time
                 this.form.categoryIds = this.form.categoryIds.map(el => parseInt(el[0], 10));
                 this.form.date = moment(Date.parse(this.form.dateTime)).format('YYYY-MM-DD HH:MM:SS');
+                this.form.url = this.form.link;
 
                 this.$refs['form'].validate((valid) => {
                     let createErr = false;

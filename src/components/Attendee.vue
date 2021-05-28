@@ -3,7 +3,7 @@
         <div class="row mb-2">
             <div class="col-12">
                 <el-card shadow="never">
-                    <div class="row w-100">
+                    <div class="row w-100 ml-1 mr-0">
                         <div class="row align-items-center">
                             <el-avatar class='mr-2' fit='cover' :size="40" :src="getAvatar()"
                                        icon="el-icon-user-solid"></el-avatar>
@@ -86,6 +86,7 @@
 
 <style scoped>
     .info {
+        margin-top: 0;
         text-align: left;
     }
 

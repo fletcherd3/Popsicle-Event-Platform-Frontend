@@ -22,11 +22,25 @@ export const Api = {
             }
         });
     },
-    uploadAvatar: (image, user) => {
-        return instance.put("/users/" + user.id + "/image", image.file, {
+    editUser: (body, userId) => {
+        return instance.patch("/users/" + userId, body, {
             headers: {
-                'X-Authorization': user.token,
+                'X-Authorization': localStorage.getItem('token')
+            }
+        });
+    },
+    uploadAvatar: (image, userId) => {
+        return instance.put("/users/" + userId + "/image", image.file, {
+            headers: {
+                'X-Authorization': localStorage.getItem('token'),
                 'Content-Type': image.file.type
+            }
+        });
+    },
+    deleteAvatar: (userId) => {
+        return instance.delete("/users/" + userId + "/image", {
+            headers: {
+                'X-Authorization': localStorage.getItem('token')
             }
         });
     },

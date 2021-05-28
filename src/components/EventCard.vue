@@ -12,26 +12,21 @@
             <div style="padding: 14px;">
                 <span>{{$props.title}}</span>
                 <div class="mt-1 container w-100">
-                    <div class="row">
-                        <div class="col-6">
+                    <div class="row w-100">
+                        <div class="ml-3 w-100">
                             <div class="row">
                                 <span class="datetime ">{{moment(Date.parse(date)).format('Do MMM YY')}}</span>
+                                <div class="datetime ml-auto">By {{[hostFName, hostSName].join(' ')}}</div>
                             </div>
                             <div class="row">
                                 <span class="datetime ">{{moment(Date.parse(date)).format('h:mm a')}}</span>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="datetime">By {{[hostFName, hostSName].join(' ')}}</div>
-                            </div>
-                            <div class="row">
-                                <div class="datetime">{{attendees}} attending</div>
+                                <div class="datetime ml-auto">{{attendees}} attending</div>
                             </div>
                         </div>
 
+
                     </div>
-                    <div class="row">
+                    <div class="row mt-2">
                         <div v-for="c in categories" v-bind:key="c">
                             <el-tag class="mr-1 mb-1" size="small">{{cMap[c]}}</el-tag>
                         </div>
