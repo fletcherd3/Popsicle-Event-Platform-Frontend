@@ -112,7 +112,7 @@
                                     fit="cover">
                             </el-image>
                         </el-upload>
-                        <el-button type="primary" v-on:click="finish">{{this.imageBtnText}}</el-button>
+                        <el-button type="primary" v-on:click="finish">{{imageBtnText}}</el-button>
                     </div>
                 </el-card>
             </div>
@@ -287,22 +287,32 @@
     }
 </script>
 
-<style>
+<style scoped>
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
+        height: auto !important;
     }
-
     .avatar-uploader .el-upload:hover {
         border-color: #409eff;
     }
 
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        margin-top: 75px;
+        margin-bottom: 75px;
+        text-align: center;
+    }
+
     .avatar {
-        width: auto;
-        height: 100%;
+        width: 178px;
+        height: 178px;
         display: block;
     }
+
 </style>

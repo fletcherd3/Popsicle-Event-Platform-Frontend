@@ -110,7 +110,7 @@
                             </el-image>
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
-                        <el-button type="primary" v-on:click="finish">{{this.imageBtnText}}</el-button>
+                        <el-button type="primary" v-on:click="finish">{{imageBtnText}}</el-button>
                     </div>
                 </el-card>
             </div>
@@ -200,13 +200,14 @@
         methods: {
             next() {
                 // Format the categories and the date/time
-                this.form.categoryIds = this.form.categoryIds.map(el => parseInt(el[0], 10));
+
                 this.form.date = moment(Date.parse(this.form.dateTime)).format('YYYY-MM-DD HH:MM:SS');
                 this.form.url = this.form.link;
 
                 this.$refs['form'].validate((valid) => {
                     let createErr = false;
                     if (valid) {
+                        this.form.categoryIds = this.form.categoryIds.map(el => parseInt(el[0], 10));
                         Api.createEvent(this.form).catch(error => {
                             createErr = true;
                             if (error.response.status === 400) {
@@ -254,19 +255,18 @@
     }
 </script>
 
-<style>
+<style scoped>
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
+        height: auto !important;
     }
-
     .avatar-uploader .el-upload:hover {
         border-color: #409eff;
     }
-
     .avatar-uploader-icon {
         font-size: 28px;
         color: #8c939d;
@@ -281,4 +281,5 @@
         height: 178px;
         display: block;
     }
+
 </style>

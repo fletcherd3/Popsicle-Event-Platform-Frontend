@@ -8,13 +8,11 @@
                         <div class="row w-100">
                             <el-button class="ml-auto" v-on:click="$router.push({ name: 'Edit Profile', params: {userId: $props.userId} })" type="primary" icon="el-icon-edit" circle></el-button>
                         </div>
-
                         <div class="mt-2">
                             <h2>{{user.firstName}} {{user.lastName}}</h2>
                             <i class="el-icon-message mr-2" />
                             <a :href="`mailto:${user.email}`">{{user.email}}</a>
                         </div>
-
                     </div>
                 </el-card>
             </div>
