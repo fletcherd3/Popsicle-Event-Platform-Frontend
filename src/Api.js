@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-export const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4941/api/v1';
+let url = 'http://localhost:4941/api/v1';
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
+    url = 'https://popsicle-server.herokuapp.com/api/v1';
+}
+export const SERVER_URL = url;
 
 const instance = axios.create({
     baseURL: SERVER_URL,
