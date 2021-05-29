@@ -121,6 +121,7 @@
 <script>
     import {Api} from '../../Api';
     import {options} from '../../categoriesMap';
+    const moment = require('moment');
 
     export default {
         name: 'CreateEvent',
@@ -200,7 +201,7 @@
             next() {
                 // Format the categories and the date/time
 
-                // this.form.date = moment(Date.parse(this.form.dateTime)).format('YYYY-MM-DD HH:MM:SS');
+                this.form.date = moment(Date.parse(this.form.dateTime)).format('YYYY-MM-DD HH:MM:SS');
                 this.form.url = this.form.link;
 
                 this.$refs['form'].validate((valid) => {

@@ -15,7 +15,7 @@
                                     {{dAttendee.attendeeId == orgId ? 'Organiser' : 'Attendee'}}
                                 </span>
                                 <span class="my-n1 p-0 text-muted">
-                                    {{dAttendee.dateOfInterest}}
+                                    {{moment(Date.parse(dAttendee.dateOfInterest)).fromNow()}}
                                 </span>
                             </div>
                         </div>
@@ -53,6 +53,7 @@
         name: 'Attendee',
         data() {
             return {
+                moment: require('moment'),
                 dAttendee: this.$props.attendee
             };
         },

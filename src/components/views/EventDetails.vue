@@ -17,8 +17,8 @@
                 </div>
                 <div class="row mt-2">
                     <div class="row w-100">
-                        <div class="datetime mr-2">{{event.date}}</div>
-                        <div class="datetime ">{{event.date}}</div>
+                        <div class="datetime mr-2">{{moment(Date.parse(event.date)).format('Do MMM YYYY')}}</div>
+                        <div class="datetime ">{{moment(Date.parse(event.date)).format('h:mm a')}}</div>
                         <div class="ml-auto mr-3">
                             <h4 v-if="event.fee != 0">${{event.fee}}</h4>
                             <h4 v-else>Free Event</h4>
@@ -147,6 +147,7 @@
         name: 'EventDetails',
         data() {
             return {
+                moment: require('moment'),
                 cMap: null,
                 event: {
                     date: null,
