@@ -124,8 +124,6 @@
     import {Api, SERVER_URL} from '../../Api';
     import {options} from '../../categoriesMap';
 
-    const moment = require('moment');
-
     export default {
         name: 'EditEvent',
         data() {
@@ -207,7 +205,7 @@
             next() {
                 // Format the categories and the date/time
                 this.form.categoryIds = this.form.categories.map(el => parseInt(el[0], 10));
-                this.form.date = moment(Date.parse(this.form.date)).format('YYYY-MM-DD HH:mm:SS');
+                // this.form.date = moment(Date.parse(this.form.date)).format('YYYY-MM-DD HH:mm:SS');
                 if (!this.form.capacity) {
                     this.form.capacity = undefined;
                 }

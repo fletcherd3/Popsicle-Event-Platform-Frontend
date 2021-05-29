@@ -15,11 +15,11 @@
                     <div class="row w-100">
                         <div class="ml-3 w-100">
                             <div class="row">
-                                <span class="datetime ">{{moment(Date.parse(date)).format('Do MMM YY')}}</span>
+                                <span class="datetime ">{{date}}</span>
                                 <div class="datetime ml-auto">By {{[hostFName, hostSName].join(' ')}}</div>
                             </div>
                             <div class="row">
-                                <span class="datetime ">{{moment(Date.parse(date)).format('h:mm a')}}</span>
+                                <span class="datetime ">{{date}}</span>
                                 <div class="datetime ml-auto">{{attendees}} attending</div>
                             </div>
                         </div>
@@ -45,7 +45,6 @@
         name: 'EventCard',
         data() {
             return {
-                moment: require('moment'),
                 cMap: null
             };
         },
