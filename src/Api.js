@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export const SERVER_URL = 'http://localhost:4941/api/v1';
+export const SERVER_URL = process.env.SERVER_URL || 'http://localhost:4941/api/v1';
 
 const instance = axios.create({
     baseURL: SERVER_URL,
-    timeout: 2500,
+    timeout: 10000,
     withCredentials: false
 });
 
