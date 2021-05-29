@@ -17,9 +17,7 @@
     "element-plus": "^1.0.2-beta.44",
     "moment": "^2.29.1",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.8"
-  },
-  "devDependencies": {
+    "vue-router": "^4.0.8",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0"
